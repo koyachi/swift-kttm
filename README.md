@@ -1,6 +1,6 @@
 # kttm
 
-Keeping Two (by Jordan Crane) to Kindle .mobi generator.
+convert Keeping Two (by Jordan Crane) to Kindle .mobi.
 
 http://whatthingsdo.com/comic/keeping-two/
 
