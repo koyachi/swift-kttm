@@ -1,6 +1,7 @@
 #!/usr/bin/env cato
 
 import Foundation
+import Cocoa
 import Alamofire
 
 // via http://stackoverflow.com/questions/25126471/cfrunloop-in-swift-command-line-program
@@ -11,8 +12,8 @@ func keepRunLoop() {
 }
 
 // via http://stackoverflow.com/questions/24281362/accessing-temp-directory-in-swift
-func createTempDirectory() -> String? {
-    let tempDirectoryTemplate = NSTemporaryDirectory().stringByAppendingPathComponent("aaa")
+func createTempDirectory(dirName: String) -> String? {
+    let tempDirectoryTemplate = NSTemporaryDirectory().stringByAppendingPathComponent(dirName)
     var err: NSError?
     if !NSFileManager.defaultManager().createDirectoryAtPath(tempDirectoryTemplate, withIntermediateDirectories: true, attributes: nil, error: &err) {
         println("err = \(err)")
@@ -23,7 +24,7 @@ func createTempDirectory() -> String? {
 }
 
 func fetchImage(url: String) {
-    let tempDirectory = createTempDirectory()
+    let tempDirectory = createTempDirectory("download")
     println("tempDirectory = \(tempDirectory)")
     if tempDirectory == nil {
         return
@@ -48,7 +49,31 @@ func fetchImage(url: String) {
                      println("create file failed: \(fileName)")
                  }
                  // TODO:画像をkindleサイズに分割
+                 let cols = columns(fileName)
+                 if cols > 3 {
+                     // TODO:分割
+                     // - 奇数コマだと適切な分割が難しそう -> opencv?
+                 }
              }
+}
+
+func columns(imageFilePath: String) -> Int {
+    let image = NSImage(contentsOfFile: imageFilePath)!
+    let bitmap = NSBitmapImageRep(data: image.TIFFRepresentation!)!
+    //println(bitmap.size)
+    let baseHeight = 539.0
+    var minIndex = 1
+    var minDiff = baseHeight * (12 + 1)
+    for i in 1...12 {
+        let height = baseHeight * Double(i)
+        let diff = abs(Double(bitmap.size.height) - height)
+        if diff < minDiff {
+            minDiff = diff
+            minIndex = i
+        }
+    }
+    println("\(imageFilePath): image.height = \(bitmap.size), minIndex = \(minIndex)")
+    return minIndex
 }
 
 func main() {
