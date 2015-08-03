@@ -9,6 +9,13 @@ http://whatthingsdo.com/comic/keeping-two/
 
 - split image file
   - guess suitable height
+    - GPUImage, Hough Transform
+      http://codezine.jp/article/detail/153
+      http://nshipster.com/gpuimage/
+      https://github.com/BradLarson/GPUImage/blob/master/framework/Source/GPUImageHoughTransformLineDetector.h
+      http://www.sunsetlakesoftware.com/2014/06/30/exploring-swift-using-gpuimage
+      検出した線から比較的寝ている線だけフィルタしても、コマのエッジ部分に寝ている線が無いと検出コマのエッジ検出が難しそう
+    - 2値化した画像を横方向に捜査してドットが見つからないラインはコマ外と判定、でよさそう
 - generate .mobi
   - prepare epub files(ncx, opf, etc)
 
