@@ -96,9 +96,11 @@ func main() {
                  let str: String = data!
                  let nsstr = str as NSString
 
-                 var location: Int = 0;
-                 var totalLength: Int = count(str);
+                 var location: Int = 0
+                 var totalLength: Int = count(str)
                  var length: Int = totalLength
+                 var index: Int = 0
+                 var urlIndex = [String: NSString]()
                  while (location <= totalLength) {
                      drintln("totalLength = \(totalLength), location = \(location), length = \(length)")
                      //let range = NSRange(location: location, length: length)
@@ -110,6 +112,7 @@ func main() {
                          drintln("match! \(match): \(url)")
                          // 2015-08-06 koyachi 一時的にコメントアウト
                          //fetchImage(url)
+                         urlIndex[String(index)] = url
                          location = match.location + match.length
                          length = totalLength - location
                          drintln("")
@@ -117,6 +120,24 @@ func main() {
                          drintln("oh...")
                          break;
                      }
+
+                     index++
+                 }
+
+                 let tempDirectory = createTempDirectory("download")
+                 drintln("tempDirectory = \(tempDirectory)")
+                 if tempDirectory == nil {
+                     return
+                 }
+                 let fileName = tempDirectory!.stringByAppendingPathComponent("urlIndex.json")
+                 var error: NSError?
+                 let json = NSJSONSerialization.dataWithJSONObject(urlIndex, options: NSJSONWritingOptions.PrettyPrinted, error: &error)
+                 if error != nil {
+                     drintln("error = \(error)")
+                 }
+                 //println(json)
+                 if !NSFileManager.defaultManager().createFileAtPath(fileName, contents: json, attributes: nil) {
+                     drintln("create file failed: \(fileName)")
                  }
                  drintln(".")
              }
