@@ -5,6 +5,24 @@ convert Keeping Two (by Jordan Crane) to Kindle .mobi.
 http://whatthingsdo.com/comic/keeping-two/
 
 
+## architecture
+
+### scraper
+
+- html解析
+- 画像ダウンロード
+- 画像順序情報ファイル出力
+
+### image processer
+
+- 画像を横2x縦3コマ単位で分割
+- ダウンロードした時点で半端なコマ(2x1, 2x2等)画像はどうするか？
+
+### mobi generator
+
+TBD
+
+
 ## TODO
 
 - split image file
