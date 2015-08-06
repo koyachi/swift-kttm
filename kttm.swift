@@ -4,6 +4,13 @@ import Foundation
 import Cocoa
 import Alamofire
 
+func drintln(msg: String) {
+    let debug = true
+    if debug {
+        println(msg)
+    }
+}
+
 // via http://stackoverflow.com/questions/25126471/cfrunloop-in-swift-command-line-program
 var shouldKeepRunning = true        // global
 func keepRunLoop() {
@@ -16,7 +23,7 @@ func createTempDirectory(dirName: String) -> String? {
     let tempDirectoryTemplate = NSTemporaryDirectory().stringByAppendingPathComponent(dirName)
     var err: NSError?
     if !NSFileManager.defaultManager().createDirectoryAtPath(tempDirectoryTemplate, withIntermediateDirectories: true, attributes: nil, error: &err) {
-        println("err = \(err)")
+        drintln("err = \(err)")
         return nil
     }
 
@@ -25,12 +32,12 @@ func createTempDirectory(dirName: String) -> String? {
 
 func fetchImage(url: String) {
     let tempDirectory = createTempDirectory("download")
-    println("tempDirectory = \(tempDirectory)")
+    drintln("tempDirectory = \(tempDirectory)")
     if tempDirectory == nil {
         return
     }
 
-    println("before download \(url)...")
+    drintln("before download \(url)...")
     Alamofire.request(.GET, url)
              .response {
                  request, response, data, error in
@@ -40,13 +47,13 @@ func fetchImage(url: String) {
                  }
 
                  let parts = url.componentsSeparatedByString("/")
-                 println("parts = \(parts)")
+                 drintln("parts = \(parts)")
                  let fileName = tempDirectory!.stringByAppendingPathComponent(parts.last!)
-                 println("fileName = \(fileName)")
-                 println("before save \(fileName)...")
+                 drintln("fileName = \(fileName)")
+                 drintln("before save \(fileName)...")
                  let rawData = data as! NSData
                  if !NSFileManager.defaultManager().createFileAtPath(fileName, contents: rawData, attributes: nil) {
-                     println("create file failed: \(fileName)")
+                     drintln("create file failed: \(fileName)")
                  }
                  // TODO:画像をkindleサイズに分割
                  let cols = columns(fileName)
@@ -60,7 +67,7 @@ func fetchImage(url: String) {
 func columns(imageFilePath: String) -> Int {
     let image = NSImage(contentsOfFile: imageFilePath)!
     let bitmap = NSBitmapImageRep(data: image.TIFFRepresentation!)!
-    //println(bitmap.size)
+    //drintln(bitmap.size)
     let baseHeight = 539.0
     var minIndex = 1
     var minDiff = baseHeight * (12 + 1)
@@ -72,7 +79,7 @@ func columns(imageFilePath: String) -> Int {
             minIndex = i
         }
     }
-    println("\(imageFilePath): image.height = \(bitmap.size), minIndex = \(minIndex)")
+    drintln("\(imageFilePath): image.height = \(bitmap.size), minIndex = \(minIndex)")
     return minIndex
 }
 
@@ -93,28 +100,29 @@ func main() {
                  var totalLength: Int = count(str);
                  var length: Int = totalLength
                  while (location <= totalLength) {
-                     println("totalLength = \(totalLength), location = \(location), length = \(length)")
+                     drintln("totalLength = \(totalLength), location = \(location), length = \(length)")
                      //let range = NSRange(location: location, length: length)
                      let range = NSMakeRange(location, length)
                      // 抜け無いか不安
                      var match = nsstr.rangeOfString("(http://whatthingsdo.com/wp-content/uploads/.*?.gif)", options: NSStringCompareOptions.RegularExpressionSearch, range: range)
                      if match.location != NSNotFound {
                          let url = nsstr.substringWithRange(match)
-                         println("match! \(match): \(url)")
-                         fetchImage(url)
+                         drintln("match! \(match): \(url)")
+                         // 2015-08-06 koyachi 一時的にコメントアウト
+                         //fetchImage(url)
                          location = match.location + match.length
                          length = totalLength - location
-                         println("")
+                         drintln("")
                      } else {
-                         println("oh...")
+                         drintln("oh...")
                          break;
                      }
                  }
-                 println(".")
+                 drintln(".")
              }
 
-    println("end.")
+    drintln("end.")
     keepRunLoop()
-    println("end.end.")
+    drintln("end.end.")
 }
 main()
