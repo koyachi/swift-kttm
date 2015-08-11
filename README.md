@@ -17,6 +17,7 @@ http://whatthingsdo.com/comic/keeping-two/
 
 - 画像を横2x縦3コマ単位で分割
 - ダウンロードした時点で半端なコマ(2x1, 2x2等)画像はどうするか？
+  - index.jsonと付きあわせて2x3コマのリズムに当てはめていく
 
 ### mobi generator
 
@@ -34,8 +35,14 @@ TBD
       http://www.sunsetlakesoftware.com/2014/06/30/exploring-swift-using-gpuimage
       検出した線から比較的寝ている線だけフィルタしても、コマのエッジ部分に寝ている線が無いと検出コマのエッジ検出が難しそう
     - 2値化した画像を横方向に捜査してドットが見つからないラインはコマ外と判定、でよさそう
+    - 明確な枠線が無いコマをどうするか。ぼんやりとした矩形認識
+      - 明確な枠が見つからない場合、2x3コマのリズムが続いてると仮定して仮想枠をあててその枠からはみ出ていなければその仮想枠があっているものと判定する
 - generate .mobi
   - prepare epub files(ncx, opf, etc)
+  
+- swift用jsonライブラリ
+  - http://qiita.com/susieyy/items/6cd0a2293555d5abb9c1
+  
 
 ## Links
 
