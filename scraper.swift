@@ -110,8 +110,7 @@ func main() {
                      if match.location != NSNotFound {
                          let url = nsstr.substringWithRange(match)
                          drintln("match! \(match): \(url)")
-                         // 2015-08-06 koyachi 一時的にコメントアウト
-                         //fetchImage(url)
+                         fetchImage(url)
                          urlIndex[String(index)] = url
                          location = match.location + match.length
                          length = totalLength - location
