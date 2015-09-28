@@ -1,4 +1,4 @@
-# kttm
+# kttm(scraper/downloader only)
 
 convert Keeping Two (by Jordan Crane) to Kindle .mobi.
 
@@ -37,6 +37,7 @@ TBD
     - 2値化した画像を横方向に捜査してドットが見つからないラインはコマ外と判定、でよさそう
     - 明確な枠線が無いコマをどうするか。ぼんやりとした矩形認識
       - 明確な枠が見つからない場合、2x3コマのリズムが続いてると仮定して仮想枠をあててその枠からはみ出ていなければその仮想枠があっているものと判定する
+      - 仮検出結果jsonを使ってjsで目視確認してみる
 - generate .mobi
   - prepare epub files(ncx, opf, etc)
   
